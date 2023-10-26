@@ -61,7 +61,7 @@ const updatePass = (item) => {
  * @param {number} item.sellIn - The number of days to sell the item.
  */
 const updateSulfuras = (item) => {
-  // sulfuras doesn't updates quality nor sellIn
+  // Sulfuras does not update the quality or sellIn values
 }
 
 /**
