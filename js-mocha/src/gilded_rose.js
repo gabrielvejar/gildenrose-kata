@@ -8,10 +8,17 @@ class Item {
 
 const itemTypes = {
   BRIE: 'Aged Brie',
-  PASSES: 'Backstage passes to a TAFKAL80ETC concert',
+  PASS: 'Backstage passes to a TAFKAL80ETC concert',
   SULFURAS: 'Sulfuras, Hand of Ragnaros'
 }
 
+/**
+ * Method to update an 'Aged Brie'
+ *
+ * @param {Object} item - The 'Aged Brie' object to be updated.
+ * @param {number} item.quality - The quality of the item.
+ * @param {number} item.sellIn - The number of days to sell the item.
+ */
 const updateBrie = (item) => {
   if (item.quality < 50) {
     item.quality = item.quality + 1;
@@ -22,7 +29,14 @@ const updateBrie = (item) => {
   }
 }
 
-const updatePasses = (item) => {
+/**
+ * Method to update a 'Backstage passes to a TAFKAL80ETC concert'
+ *
+ * @param {Object} item - The 'Backstage passes to a TAFKAL80ETC concert' object to be updated.
+ * @param {number} item.quality - The quality of the item.
+ * @param {number} item.sellIn - The number of days to sell the item.
+ */
+const updatePass = (item) => {
   if (item.quality < 50) {
     item.quality = item.quality + 1;
     if (item.sellIn < 11 && item.quality < 50) {
@@ -33,25 +47,37 @@ const updatePasses = (item) => {
     }
   }
   item.sellIn = item.sellIn - 1;
-  if (item.sellIn < 0 && item.quality < 50) {
-    item.quality = item.quality + 1;
+  if (item.sellIn < 0) {
+    item.quality = item.quality - item.quality;
   } 
 }
 
+/**
+ * Method to update an 'Sulfuras, Hand of Ragnaros'
+ *
+ * @param {Object} item - The 'Sulfuras, Hand of Ragnaros' object to be updated.
+ * @param {number} item.quality - The quality of the item.
+ * @param {number} item.sellIn - The number of days to sell the item.
+ */
 const updateSulfuras = (item) => {
   // sulfuras doesn't updates quality nor sellIn
 }
 
+/**
+ * Method to update a normal item
+ *
+ * @param {Object} item - The normal item object to be updated.
+ * @param {number} item.quality - The quality of the item.
+ * @param {number} item.sellIn - The number of days to sell the item.
+ */
 const updateNormalItem = (item) => {
   if (item.quality > 0) {
     item.quality = item.quality - 1;
   }
   item.sellIn = item.sellIn - 1;
-  if (item.sellIn < 0) {
-    if (item.quality > 0) {
-      item.quality = item.quality - 1;
-    }
-  }
+  if (item.sellIn < 0 && item.quality > 0) {
+    item.quality = item.quality - 1;
+  }   
 }
 
 class Shop {
@@ -59,17 +85,22 @@ class Shop {
     this.items = items;
   }
   updateQuality() {
-    const updateMethods = {
-      BRIE: updateBrie,
-      PASSES: updatePasses,
-      SULFURAS: updateSulfuras,
-      default: updateNormalItem
+    for (const item of this.items) {
+      switch (item.name) {
+        case itemTypes.BRIE:
+          updateBrie(item);
+          break;
+        case itemTypes.PASS:
+          updatePass(item);
+          break;
+        case itemTypes.SULFURAS:
+          updateSulfuras(item);
+          break;
+        default:
+          updateNormalItem(item);
+          break;
+      }
     }
-    this.items.forEach(function (item) {
-
-      updateSulfuras(item)
-    })
-
     return this.items;
   }
 }
