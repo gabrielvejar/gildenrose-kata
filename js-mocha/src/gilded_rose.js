@@ -9,7 +9,8 @@ class Item {
 const itemTypes = {
   BRIE: 'Aged Brie',
   PASS: 'Backstage passes to a TAFKAL80ETC concert',
-  SULFURAS: 'Sulfuras, Hand of Ragnaros'
+  SULFURAS: 'Sulfuras, Hand of Ragnaros',
+  CONJURED: 'Conjured Mana Cake'
 }
 
 /**
@@ -77,7 +78,24 @@ const updateNormalItem = (item) => {
   item.sellIn = item.sellIn - 1;
   if (item.sellIn < 0 && item.quality > 0) {
     item.quality = item.quality - 1;
-  }   
+  }
+}
+
+/**
+ * Method to update a 'Conjured Mana Cake' item
+ *
+ * @param {Object} item - The 'Conjured Mana Cake' item object to be updated.
+ * @param {number} item.quality - The quality of the item.
+ * @param {number} item.sellIn - The number of days to sell the item.
+ */
+const updateConjured = (item) => {
+  if (item.quality > 0) {
+    item.quality = item.quality - 2;
+  }
+  item.sellIn = item.sellIn - 1;
+  if (item.sellIn < 0 && item.quality > 0) {
+    item.quality = item.quality - 2;
+  } 
 }
 
 class Shop {
@@ -95,6 +113,9 @@ class Shop {
           break;
         case itemTypes.SULFURAS:
           updateSulfuras(item);
+          break;
+        case itemTypes.CONJURED:
+          updateConjured(item);
           break;
         default:
           updateNormalItem(item);
